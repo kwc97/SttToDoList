@@ -7,7 +7,7 @@ import uuid
 from pipeline import PipelineOrchestrator
 import json
 
-app = FastAPI(title="Meeting STT & Todo Pipeline API")
+app = FastAPI(title="Meeting STT & Todo Pipeline API", docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 # Enable CORS for Next.js
 app.add_middleware(
@@ -24,7 +24,7 @@ orchestrator = PipelineOrchestrator()
 TEMP_DIR = "/tmp"
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-@app.post("/upload")
+@app.post("/api/upload")
 async def upload_audio(file: UploadFile = File(...)):
     """
     Uploads an audio file, runs the AI pipeline, and returns the structured result.
@@ -70,7 +70,7 @@ async def upload_audio(file: UploadFile = File(...)):
             os.remove(file_path)
             print(f"🧹 [API] Cleaned up: {file_path}")
 
-@app.get("/health")
+@app.get("/api/health")
 def health_check():
     return {"status": "ok"}
 
