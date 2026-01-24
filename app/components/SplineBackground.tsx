@@ -63,16 +63,16 @@ export default function SplineBackground() {
 
       {/* Loading State */}
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
-          <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <div className="absolute inset-0 flex items-center justify-center bg-[#050505]">
+          <div className="w-8 h-8 border-4 border-white/10 border-t-blue-500 rounded-full animate-spin"></div>
         </div>
       )}
 
       {/* Glass Overlay */}
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-[3px] pointer-events-none" />
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] pointer-events-none" />
       
       {/* Dynamic Gradient Overlay for Atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/5 via-transparent to-purple-400/5 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none" />
     </div>
   );
 }
