@@ -39,3 +39,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+.env
+
+# Trae/Claude
+.trae/
+.claude/
+
+# Cleanup
+web/
+temp_uploads/
+
+# Weird files
+nul
