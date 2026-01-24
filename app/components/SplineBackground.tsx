@@ -51,7 +51,7 @@ export default function SplineBackground() {
           transition={{
             opacity: { duration: 1 },
             scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" }, // 20 seconds per rotation
+            rotate: { duration: 120, repeat: Infinity, ease: "linear" }, // 120 seconds per rotation
           }}
         >
           <Spline 
