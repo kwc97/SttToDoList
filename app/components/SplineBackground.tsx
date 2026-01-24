@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Spline from '@splinetool/react-spline';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function SplineBackground() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -11,8 +11,8 @@ export default function SplineBackground() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth spring animation for mouse movement
-  const springConfig = { damping: 30, stiffness: 200 };
+  // Smooth spring animation for mouse movement - More responsive now
+  const springConfig = { damping: 20, stiffness: 100 };
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
@@ -23,8 +23,9 @@ export default function SplineBackground() {
       const normalizedX = (e.clientX / innerWidth) * 2 - 1;
       const normalizedY = (e.clientY / innerHeight) * 2 - 1;
       
-      mouseX.set(normalizedX * 20); // Move 20px max
-      mouseY.set(normalizedY * 20);
+      // Increased range for dynamic feel (50px movement)
+      mouseX.set(normalizedX * 50); 
+      mouseY.set(normalizedY * 50);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -33,38 +34,45 @@ export default function SplineBackground() {
 
   return (
     <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden bg-gray-50">
-      {/* Animated Container */}
+      {/* Parallax Container - Moves with mouse */}
       <motion.div 
         className="absolute inset-0 w-full h-full"
-        style={{ x, y, scale: 1.1 }} // Scale up slightly to avoid edges
-        initial={{ opacity: 0 }}
-        animate={{ 
-          opacity: isLoaded ? 1 : 0,
-          rotate: [0, 5, 0, -5, 0], // Subtle continuous rotation
-        }}
-        transition={{
-          opacity: { duration: 1.5 },
-          rotate: { duration: 60, repeat: Infinity, ease: "linear" }
-        }}
+        style={{ x, y }}
       >
-        <Spline 
-          scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" 
-          onLoad={() => setIsLoaded(true)}
-        />
+        {/* Animation Container - Continuous movement */}
+        <motion.div
+          className="w-full h-full"
+          initial={{ opacity: 0, scale: 1 }}
+          animate={{ 
+            opacity: isLoaded ? 1 : 0,
+            scale: [1.1, 1.2, 1.1], // Dynamic Breathing
+            rotate: 360, // Continuous Full Rotation
+          }}
+          transition={{
+            opacity: { duration: 1 },
+            scale: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 60, repeat: Infinity, ease: "linear" }, // 1 minute per rotation
+          }}
+        >
+          <Spline 
+            scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" 
+            onLoad={() => setIsLoaded(true)}
+          />
+        </motion.div>
       </motion.div>
 
-      {/* Loading State Placeholder */}
+      {/* Loading State */}
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
           <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
         </div>
       )}
 
-      {/* Glass Overlay for better text readability */}
-      <div className="absolute inset-0 bg-white/40 backdrop-blur-[3px] pointer-events-none" />
+      {/* Glass Overlay */}
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-[3px] pointer-events-none" />
       
-      {/* Gradient Overlay for sophistication */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/50 pointer-events-none" />
+      {/* Dynamic Gradient Overlay for Atmosphere */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/5 via-transparent to-purple-400/5 pointer-events-none" />
     </div>
   );
 }
