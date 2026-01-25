@@ -15,7 +15,7 @@ export default function SplineBackground() {
         transition={{ duration: 1.5 }}
       >
         <iframe 
-          src='https://my.spline.design/boxeshover-oAeh9mj12ut2hz7MokR3Ue4e/' 
+          src='https://my.spline.design/boxeshover-jqa5EtvafCx0iRGv6KznKzvf/' 
           frameBorder='0' 
           width='100%' 
           height='100%'
@@ -32,8 +32,8 @@ export default function SplineBackground() {
         </div>
       )}
 
-      {/* Glass Overlay - Kept for consistency with dark theme */}
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] pointer-events-none" />
+      {/* Glass Overlay - Reduced opacity and removed blur for better interactivity visibility */}
+      <div className="absolute inset-0 bg-black/10 pointer-events-none" />
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none" />

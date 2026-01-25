@@ -66,12 +66,12 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10 pointer-events-none">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 space-y-6"
+          className="text-center mb-16 space-y-6 pointer-events-auto"
         >
           <h2 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight">
             회의 내용을 <br className="hidden md:block" />
@@ -85,7 +85,7 @@ export default function Home() {
           </p>
         </motion.div>
 
-        <div className="space-y-12 max-w-3xl mx-auto">
+        <div className="space-y-12 max-w-3xl mx-auto pointer-events-auto">
           {/* Upload Section */}
           <motion.section 
             initial={{ opacity: 0, scale: 0.95 }}
