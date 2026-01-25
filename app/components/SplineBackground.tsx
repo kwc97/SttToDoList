@@ -7,7 +7,7 @@ export default function SplineBackground() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden bg-[#050505] pointer-events-auto">
+    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden bg-[#050505] pointer-events-auto">
       <motion.div
         className="absolute inset-0 w-full h-full"
         initial={{ opacity: 0 }}
@@ -21,7 +21,7 @@ export default function SplineBackground() {
           height='100%'
           onLoad={() => setIsLoaded(true)}
           title="Spline 3D Background"
-          className="w-full h-full"
+          className="w-full h-full pointer-events-auto"
         />
       </motion.div>
 
