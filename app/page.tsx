@@ -55,7 +55,7 @@ export default function Home() {
               <Mic2 className="w-5 h-5 text-blue-400" />
             </div>
             <h1 className="text-xl font-bold text-white tracking-wide">
-              STT TODO LIST
+              말로 만드는 TODO
             </h1>
           </div>
           {/* Login section removed as requested */}
