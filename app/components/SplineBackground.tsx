@@ -7,7 +7,7 @@ export default function SplineBackground() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden bg-[#050505]">
+    <div className="fixed inset-0 w-full h-full -z-10 overflow-hidden bg-[#050505] pointer-events-auto">
       <motion.div
         className="absolute inset-0 w-full h-full"
         initial={{ opacity: 0 }}
@@ -31,12 +31,6 @@ export default function SplineBackground() {
           <div className="w-8 h-8 border-4 border-white/10 border-t-blue-500 rounded-full animate-spin"></div>
         </div>
       )}
-
-      {/* Glass Overlay - Reduced opacity and removed blur for better interactivity visibility */}
-      <div className="absolute inset-0 bg-black/10 pointer-events-none" />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none" />
     </div>
   );
 }

@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { Mic2, Sparkles, Upload } from "lucide-react";
+import { Mic2, Sparkles, Upload, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import FileUpload from "./components/FileUpload";
 import ResultViewer from "./components/ResultViewer";
 import SplineBackground from "./components/SplineBackground";
 
 // Define the API URL
-// In a real app, this would be in an environment variable
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 export default function Home() {
@@ -45,107 +44,148 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative font-[family-name:var(--font-geist-sans)] overflow-hidden">
+    <main className="min-h-screen relative font-[family-name:var(--font-geist-sans)] overflow-x-hidden pointer-events-none">
       <SplineBackground />
       
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-black/30 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-blue-600/90 p-2 rounded-xl shadow-lg shadow-blue-500/20">
-              <Mic2 className="w-5 h-5 text-white" />
+      <header className="fixed top-0 w-full z-50 bg-transparent backdrop-blur-[2px]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 pointer-events-auto">
+            <div className="bg-white/10 p-2.5 rounded-2xl backdrop-blur-md border border-white/10 shadow-lg">
+              <Mic2 className="w-5 h-5 text-blue-400" />
             </div>
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
-              AI 회의 비서
+            <h1 className="text-xl font-bold text-white tracking-wide">
+              Meeting<span className="text-blue-400">AI</span>
             </h1>
           </div>
-          <div className="text-sm text-gray-300 font-medium px-3 py-1 rounded-full bg-white/10 border border-white/10">
-            Powered by Trae Builder
+          <div className="hidden md:block pointer-events-auto">
+             <button className="px-5 py-2 text-sm font-medium text-white/80 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors backdrop-blur-md border border-white/5">
+                로그인
+             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10 pointer-events-none">
+      {/* Hero Section - Full Screen with Spline Background Visible */}
+      <section className="relative h-screen flex flex-col items-center justify-center z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 space-y-6 pointer-events-auto"
+          transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
+          className="text-center space-y-8 max-w-4xl px-4 pointer-events-none select-none"
         >
-          <h2 className="text-5xl md:text-6xl font-extrabold text-white tracking-tight">
-            회의 내용을 <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
-              실행 가능한 업무
-            </span>로
+          {/* Main Title - Allowing interaction through text by pointer-events-none */}
+          <h2 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white/80 to-white/20 tracking-tighter leading-[0.9]">
+            MEETING <br/> INTELLIGENCE
           </h2>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed backdrop-blur-sm bg-black/30 p-4 rounded-2xl border border-white/10 shadow-sm">
-            회의 녹음 파일을 업로드하세요. <br/>
-            AI가 자동으로 요약하고 Notion 업무 리스트에 동기화해 드립니다.
+          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto">
+            당신의 회의를 실행 가능한 업무로 전환하세요.
           </p>
         </motion.div>
 
-        <div className="space-y-12 max-w-3xl mx-auto pointer-events-auto">
-          {/* Upload Section */}
-          <motion.section 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className={result ? "hidden" : "block"}
-          >
-            <div className="bg-black/40 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-blue-500/10 border border-white/10">
-              <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
-              
-              {isLoading && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-8 text-center space-y-4"
-                >
-                  <div className="flex items-center justify-center gap-3 text-blue-400 font-medium bg-blue-500/10 py-3 rounded-full">
-                    <Sparkles className="w-5 h-5 animate-spin-slow" />
-                    <span>AI 파이프라인 가동 중...</span>
-                  </div>
-                  <p className="text-sm text-gray-400">
-                    음성 변환 • 맥락 분석 • 업무 추출 • Notion 연동
-                  </p>
-                </motion.div>
-              )}
-              
-              {error && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-red-900/50 backdrop-blur-sm text-red-200 rounded-xl text-center border border-red-500/20"
-                >
-                  {error}
-                </motion.div>
-              )}
-            </div>
-          </motion.section>
+        {/* Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/30 animate-bounce pointer-events-auto cursor-pointer"
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+        >
+          <ArrowDown className="w-6 h-6" />
+        </motion.div>
+      </section>
 
-          {/* Results Section */}
-          {result && (
-            <motion.section
+      {/* Content Section - Matches Spline "Interior" Feel */}
+      <section className="relative min-h-screen z-20 bg-[#050505] pointer-events-auto">
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-transparent to-[#050505] -mt-32 pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">
+              워크플로우 시작하기
+            </h3>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              녹음 파일을 업로드하면 AI가 분석하여 Notion 데이터베이스에 자동으로 동기화합니다.
+            </p>
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto">
+            {/* Upload Card - Glassmorphism fitting the dark interior */}
+            <motion.div 
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className={result ? "hidden" : "block"}
             >
-              <div className="mb-8 flex justify-center">
-                 <button 
-                   onClick={() => { setResult(null); setFile(null); }}
-                   className="group flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/10 text-gray-200 font-medium hover:text-blue-400 hover:bg-white/20 transition-all border border-white/10"
-                 >
-                   <Upload className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
-                   다른 파일 처리하기
-                 </button>
+              <div className="bg-[#0A0A0A] rounded-[2rem] p-10 shadow-2xl border border-white/5 relative overflow-hidden group">
+                {/* Decorative gradients */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
+                <div className="absolute -top-[200px] -right-[200px] w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] group-hover:bg-blue-600/20 transition-colors duration-700" />
+                
+                <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
+                
+                {isLoading && (
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="mt-10 text-center space-y-5"
+                  >
+                    <div className="inline-flex items-center gap-3 text-blue-400 font-medium bg-blue-500/10 px-6 py-3 rounded-full border border-blue-500/20">
+                      <Sparkles className="w-5 h-5 animate-spin-slow" />
+                      <span>AI Processing Pipeline Active</span>
+                    </div>
+                    <p className="text-sm text-gray-500 font-mono">
+                      Transcribing • Analyzing • Syncing to Notion
+                    </p>
+                  </motion.div>
+                )}
+                
+                {error && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-8 p-4 bg-red-500/10 text-red-400 rounded-xl text-center border border-red-500/20 text-sm"
+                  >
+                    {error}
+                  </motion.div>
+                )}
               </div>
-              <div className="bg-black/40 backdrop-blur-md rounded-3xl shadow-xl border border-white/10 overflow-hidden">
-                <ResultViewer data={result} />
-              </div>
-            </motion.section>
-          )}
+            </motion.div>
+
+            {/* Results Section */}
+            {result && (
+              <motion.section
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div className="mb-10 flex justify-center">
+                   <button 
+                     onClick={() => { setResult(null); setFile(null); }}
+                     className="group flex items-center gap-2 px-8 py-3 rounded-full bg-[#1A1A1A] text-gray-300 font-medium hover:text-white hover:bg-[#252525] transition-all border border-white/5 hover:border-white/10"
+                   >
+                     <Upload className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                     새로운 파일 분석하기
+                   </button>
+                </div>
+                <div className="bg-[#0A0A0A] rounded-[2rem] shadow-2xl border border-white/5 overflow-hidden">
+                  <ResultViewer data={result} />
+                </div>
+              </motion.section>
+            )}
+          </div>
         </div>
-      </div>
+        
+        {/* Footer */}
+        <footer className="border-t border-white/5 py-12 bg-black text-center text-gray-600 text-sm">
+          <p>© 2025 AI Meeting Assistant. All rights reserved.</p>
+        </footer>
+      </section>
     </main>
   );
 }
