@@ -55,34 +55,17 @@ export default function Home() {
               <Mic2 className="w-5 h-5 text-blue-400" />
             </div>
             <h1 className="text-xl font-bold text-white tracking-wide">
-              Meeting<span className="text-blue-400">AI</span>
+              STT TODO LIST
             </h1>
           </div>
-          <div className="hidden md:block pointer-events-auto">
-             <button className="px-5 py-2 text-sm font-medium text-white/80 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-colors backdrop-blur-md border border-white/5">
-                로그인
-             </button>
-          </div>
+          {/* Login section removed as requested */}
         </div>
       </header>
 
       {/* Hero Section - Full Screen with Spline Background Visible */}
       <section className="relative h-screen flex flex-col items-center justify-center z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-          className="text-center space-y-8 max-w-4xl px-4 pointer-events-none select-none"
-        >
-          {/* Main Title - Allowing interaction through text by pointer-events-none */}
-          <h2 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white/80 to-white/20 tracking-tighter leading-[0.9]">
-            MEETING <br/> INTELLIGENCE
-          </h2>
-          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto">
-            당신의 회의를 실행 가능한 업무로 전환하세요.
-          </p>
-        </motion.div>
-
+        {/* Text removed as requested */}
+        
         {/* Scroll Indicator */}
         <motion.div 
           initial={{ opacity: 0 }}
