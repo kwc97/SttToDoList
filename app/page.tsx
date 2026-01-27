@@ -93,9 +93,19 @@ export default function Home() {
             <h3 className="text-3xl md:text-5xl font-bold text-white mb-6">
               워크플로우 시작하기
             </h3>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
               녹음 파일을 업로드하면 AI가 분석하여 Notion 데이터베이스에 자동으로 동기화합니다.
             </p>
+            <div className="inline-block text-left bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 space-y-3">
+              <p className="text-sm text-blue-400 font-semibold flex items-center gap-2 mb-2">
+                <Sparkles className="w-4 h-4" /> 사용 방법 안내
+              </p>
+              <ul className="text-gray-300 text-sm space-y-2 list-disc list-inside marker:text-blue-500">
+                <li>회의 시작 시 <strong>회의 날짜</strong>를 말하고 시작하세요.</li>
+                <li>발언할 때는 항상 <strong>본인 이름</strong>을 말한 후 이야기하세요.</li>
+                <li>업무가 나오면 <strong>마감일(Due date)</strong>도 함께 말해주면 더 정확하게 정리됩니다.</li>
+              </ul>
+            </div>
           </motion.div>
 
           <div className="max-w-4xl mx-auto">
