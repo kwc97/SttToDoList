@@ -102,7 +102,7 @@ export default function Home() {
               </p>
               <ul className="text-gray-300 text-sm space-y-2 list-disc list-inside marker:text-blue-500">
                 <li>회의 시작 시 <strong>회의 날짜</strong>를 말하고 시작하세요.</li>
-                <li>발언할 때는 항상 <strong>본인 이름</strong>을 말한 후 이야기하세요.</li>
+                <li>회의 첫 발언 시 <strong>본인 이름</strong>을 말한 후 이야기하세요.</li>
                 <li>업무가 나오면 <strong>마감일(Due date)</strong>도 함께 말해주면 더 정확하게 정리됩니다.</li>
               </ul>
             </div>
