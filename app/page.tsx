@@ -14,44 +14,77 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState<string>("");
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const pollTaskStatus = async (taskId: string) => {
+    const baseUrl = API_URL.endsWith("/api") ? API_URL : `${API_URL.replace(/\/$/, "")}/api`;
+    
+    try {
+      const response = await axios.get(`${baseUrl}/status/${taskId}`);
+      const data = response.data;
+
+      if (data.status === "completed") {
+        setResult(data.result);
+        setIsLoading(false);
+        setStatus("");
+      } else if (data.status === "failed") {
+        setError(data.error || "분석 중 오류가 발생했습니다.");
+        setIsLoading(false);
+        setStatus("");
+      } else {
+        // Continue polling
+        setStatus(data.status === "processing" ? "AI가 내용을 분석하고 있습니다..." : "대기 중...");
+        setTimeout(() => pollTaskStatus(taskId), 3000);
+      }
+    } catch (err) {
+      console.error("❌ [Polling] Error:", err);
+      setError("상태를 확인하는 중 오류가 발생했습니다.");
+      setIsLoading(false);
+    }
+  };
 
   const handleFileSelect = async (selectedFile: File) => {
     setFile(selectedFile);
     setError(null);
     setResult(null);
     setIsLoading(true);
+    setStatus("파일을 업로드하는 중...");
 
     const formData = new FormData();
     formData.append("file", selectedFile);
 
     try {
-      // API URL 정규화 (끝에 /api가 없으면 붙여줌)
+      // API URL 정규화
       const baseUrl = API_URL.endsWith("/api") ? API_URL : `${API_URL.replace(/\/$/, "")}/api`;
       
       console.log(`📤 [API] Uploading to: ${baseUrl}/upload`);
 
-      // Send to FastAPI Backend
+      // 1. Start the task
       const response = await axios.post(`${baseUrl}/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        timeout: 600000, // 10분 타임아웃 설정 (Render 서버 대기용)
       });
 
-      setResult(response.data);
+      const { task_id } = response.data;
+      console.log(`🆔 [API] Task started: ${task_id}`);
+      
+      // 2. Start polling for status
+      setStatus("업로드 완료! 분석을 시작합니다...");
+      pollTaskStatus(task_id);
+
     } catch (err: any) {
       console.error("❌ [API] Error:", err);
-      if (err.code === "ECONNABORTED") {
-        setError("서버 응답 시간이 초과되었습니다. 파일이 너무 크거나 서버가 준비 중일 수 있습니다.");
-      } else if (err.response?.status === 413) {
+      setIsLoading(false);
+      setStatus("");
+      
+      if (err.response?.status === 413) {
         setError("파일 용량이 너무 큽니다. 더 작은 파일로 시도해 주세요.");
       } else {
-        setError(`연결 실패: ${err.message}. Render 서버가 'Live' 상태인지, Vercel 환경변수 주소가 맞는지 확인해 주세요.`);
+        setError(`연결 실패: ${err.message}. 서버 설정을 확인해 주세요.`);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -143,10 +176,10 @@ export default function Home() {
                   >
                     <div className="inline-flex items-center gap-3 text-blue-400 font-medium bg-blue-500/10 px-6 py-3 rounded-full border border-blue-500/20">
                       <Sparkles className="w-5 h-5 animate-spin-slow" />
-                      <span>AI Processing Pipeline Active</span>
+                      <span>{status || "AI Processing Pipeline Active"}</span>
                     </div>
                     <p className="text-sm text-gray-500 font-mono">
-                      Transcribing • Analyzing • Syncing to Notion
+                      {status.includes("분석") ? "Transcribing • Analyzing • Syncing" : "Preparing Audio Stream"}
                     </p>
                   </motion.div>
                 )}
