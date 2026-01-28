@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: stt-todo-backend
+    env: docker
+    plan: free
+    region: singapore
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NOTION_API_KEY
+        sync: false
+      - key: NOTION_DATABASE_ID
+        sync: false
+      - key: PORT
+        value: 8000
+    healthCheckPath: /api/health
+    dockerContext: .
+    dockerfilePath: Dockerfile

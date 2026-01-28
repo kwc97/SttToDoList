@@ -85,5 +85,7 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
+    # Use PORT environment variable for Render/Cloud deployment
+    port = int(os.getenv("PORT", 8000))
     # Increase timeout for long-running AI tasks
-    uvicorn.run(app, host="0.0.0.0", port=8000, timeout_keep_alive=600)
+    uvicorn.run(app, host="0.0.0.0", port=port, timeout_keep_alive=600)
