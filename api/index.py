@@ -79,6 +79,14 @@ async def upload_audio(file: UploadFile = File(...)):
             except Exception as cleanup_error:
                 print(f"⚠️ [API] Cleanup warning: {cleanup_error}")
 
+@app.get("/")
+def root():
+    return {
+        "message": "AI Meeting Assistant API is running",
+        "docs": "/api/docs",
+        "health": "/api/health"
+    }
+
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "mode": "persistent"}
