@@ -27,17 +27,29 @@ export default function Home() {
     formData.append("file", selectedFile);
 
     try {
+      // API URL 정규화 (끝에 /api가 없으면 붙여줌)
+      const baseUrl = API_URL.endsWith("/api") ? API_URL : `${API_URL.replace(/\/$/, "")}/api`;
+      
+      console.log(`📤 [API] Uploading to: ${baseUrl}/upload`);
+
       // Send to FastAPI Backend
-      const response = await axios.post(`${API_URL}/upload`, formData, {
+      const response = await axios.post(`${baseUrl}/upload`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        timeout: 600000, // 10분 타임아웃 설정 (Render 서버 대기용)
       });
 
       setResult(response.data);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to process audio file. Please ensure the backend server is running.");
+    } catch (err: any) {
+      console.error("❌ [API] Error:", err);
+      if (err.code === "ECONNABORTED") {
+        setError("서버 응답 시간이 초과되었습니다. 파일이 너무 크거나 서버가 준비 중일 수 있습니다.");
+      } else if (err.response?.status === 413) {
+        setError("파일 용량이 너무 큽니다. 더 작은 파일로 시도해 주세요.");
+      } else {
+        setError(`연결 실패: ${err.message}. Render 서버가 'Live' 상태인지, Vercel 환경변수 주소가 맞는지 확인해 주세요.`);
+      }
     } finally {
       setIsLoading(false);
     }
