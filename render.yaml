@@ -11,8 +11,6 @@ services:
         sync: false
       - key: NOTION_DATABASE_ID
         sync: false
-      - key: PORT
-        value: 8000
     healthCheckPath: /api/health
     dockerContext: .
     dockerfilePath: Dockerfile
